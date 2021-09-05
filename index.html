@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cowlculator 🐄</title>
+  <title>Cowculator 🐄</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -18,103 +18,108 @@
       History here
     </div> -->
     <section class="calculator">
-      <input type="text" class="calculator__screen" disabled>
+      <article class="calculator__screen">
+        <p class="calculator__calculation"></p>
+        <p class="calculator__solution"></p>
+      </article>
       <div class="calculator__methods">
         <div class="calculator__functions">
-          <button class="calculator__func">
+          <button data-type="sin" class="calculator__func primary-btn">
             sin
           </button>
-          <button class="calculator__func">
+          <button data-type="cos" class="calculator__func primary-btn">
             cos
           </button>
-          <button class="calculator__func">
+          <button data-type="tan" class="calculator__func primary-btn">
             tan
           </button>
-          <button class="calculator__func">
+          <button data-type="pi" class="calculator__func primary-btn">
             🥧(π)
           </button>
-          <button class="calculator__func">
+          <button data-type="squareRoot" class="calculator__func primary-btn">
             √
           </button>
-          <button class="calculator__func">
+          <button data-type="powerOf" class="calculator__func primary-btn">
             <var>
               x<sup>y</sup>
             </var>
           </button>
-          <button class="calculator__func">
+          <button data-type="natLogarithm" class="calculator__func primary-btn">
             ln
           </button>
-          <button class="calculator__func">
+          <button data-type="logarithm" class="calculator__func primary-btn">
             log
           </button>
         </div>
         <div class="calculator__number-pad">
-          <button class="calculator__number">
+          <button data-type="7" class="calculator__number">
             7
           </button>
-          <button class="calculator__number">
+          <button data-type="8" class="calculator__number">
             8
           </button>
-          <button class="calculator__number">
+          <button data-type="9" class="calculator__number">
             9
           </button>
-          <button class="calculator__number">
+          <button data-type="4" class="calculator__number">
             4
           </button>
-          <button class="calculator__number">
+          <button data-type="5" class="calculator__number">
             5
           </button>
-          <button class="calculator__number">
+          <button data-type="6" class="calculator__number">
             6
           </button>
-          <button class="calculator__number">
+          <button data-type="1" class="calculator__number">
             1
           </button>
-          <button class="calculator__number">
+          <button data-type="2" class="calculator__number">
             2
           </button>
-          <button class="calculator__number">
+          <button data-type="3" class="calculator__number">
             3
           </button>
-          <button class="calculator__number">
+          <button data-type="0" class="calculator__number">
             0
           </button>
-          <button class="calculator__number">
+          <button data-type="." class="calculator__number">
             .
           </button>
-          <button class="calculator__number">
+          <button data-type="=" class="calculator__number">
             =
           </button>
       </div>
-      <div class="calculator__arithmetic">
-        <button class="calculator__symbol">
-          ➗
+      <div class="calculator__method-wrapper">
+        <div class="calculator__arithmetic">
+          <button data-type="/" class="calculator__symbol  primary-btn">
+            ÷
         </button>
-        <button class="calculator__symbol">
-          ✖
+        <button data-type="*" class="calculator__symbol  primary-btn">
+          ×
         </button>
-        <button class="calculator__symbol">
-          ➖
+        <button data-type="-" class="calculator__symbol  primary-btn">
+          −
         </button>
-        <button class="calculator__symbol">
-          ➕
+        <button data-type="+" class="calculator__symbol  primary-btn">
+          +
         </button>
       </div>
       <div class="calculator__adjusters">
-        <button class="calculator__symbol">
+        <button data-type="ac" class="calculator__adj  primary-btn">
           AC
         </button>
-        <button class="calculator__symbol">
+        <button data-type="back" class="calculator__adj  primary-btn">
           BACK
         </button>
-        <button class="calculator__symbol">
+        <button data-type="(" class="calculator__adj  primary-btn">
           (
-        </button>
-        <button class="calculator__symbol">
-          )
-        </button>
+          </button>
+          <button data-type=")" class="calculator__adj  primary-btn">
+            )
+          </button>
+        </div>
       </div>
-    </div>
+      </div>
     </section>
   </main>
   <script src="./script.js"></script>
