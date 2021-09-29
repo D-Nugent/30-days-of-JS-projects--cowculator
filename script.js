@@ -1,5 +1,6 @@
 // Element Selectors
 const allBtns = document.querySelectorAll('button');
+const toggle = document.querySelectorAll('input[type="radio"]');
 const calcScreen = {
   all: document.querySelector('.calculator__screen'),
   calc: document.querySelector('.calculator__calculation'),
@@ -7,16 +8,19 @@ const calcScreen = {
 }
 
 // Event Listeners
-allBtns.forEach(btn => btn.addEventListener('transitionend',function(){this.classList.remove('--active')}))
-allBtns.forEach(btn => btn.addEventListener('click',function(){this.classList.add('--active')}))
-allBtns.forEach(btn => btn.addEventListener('click',addEntry))
+allBtns.forEach(btn => btn.addEventListener('transitionend',function(){this.classList.remove('--active')}));
+allBtns.forEach(btn => btn.addEventListener('click',function(){this.classList.add('--active')}));
+allBtns.forEach(btn => btn.addEventListener('click',addEntry));
+toggle.forEach(radio => radio.addEventListener('click', toggleRadians))
 
 // Control Variables
 let calcHistory = [];
 let currentCalc = [];
 let solution;
 let nonOperators = [0,1,2,3,4,5,6,7,8,9,'.','(',')'];
+let trigonometryOperators = ['sin(','cos(','tan('];
 let isError = false;
+let isRadians = true;
 const calcMapping = {
   ac:()=>{
     currentCalc.length = 0;
@@ -28,6 +32,7 @@ const calcMapping = {
     currentCalc.pop();
   },
   '=':()=>{
+    const isTrigonometry = currentCalc.some((calcEntry) => trigonometryOperators.indexOf(calcEntry) >= 0);
     if (currentCalc.includes('√')) {
       let indexOfSquareRoot = currentCalc.indexOf('√');
       let calcCopy = [...currentCalc]
@@ -35,8 +40,20 @@ const calcMapping = {
       calcCopy.push(')');
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
-      return calcHistory.push(currentCalc)
-    }
+      return calcHistory.push(currentCalc);
+    } else if (isTrigonometry) {
+      let calcCopy = [...currentCalc];
+      let trigType = calcCopy.includes('sin(') ? 'sin(' : calcCopy.includes('cos(') ? 'cos(' : 'tan(';
+      let trigIndex = calcCopy.indexOf(trigType);
+      calcCopy.splice(trigIndex,1,`Math.${trigType}`);
+      if (!isRadians) {
+        let trigEndIndex = calcCopy.indexOf(')',trigIndex);
+        calcCopy.splice(trigEndIndex,1,`* (Math.PI/180))`);
+      }
+      solution = eval(calcCopy.join(''));
+      currentCalc.push(' = ');
+      return calcHistory.push(currentCalc);
+    };
     let calc = eval(currentCalc.join(''));
     console.log(calc);
     solution = calc;
@@ -58,10 +75,14 @@ const calcMapping = {
   squareRoot:() => {
     nonOperators.includes(parseFloat(currentCalc[currentCalc.length-1])) && currentCalc.push('*')
     currentCalc.push(`√`);
-  }
+  },
 }
 
 // Functions
+
+function toggleRadians(){
+  this.value === 'degrees' ? isRadians = false : isRadians = true;
+}
 
 function addEntry(){
   if (isError) calcMapping.ac();

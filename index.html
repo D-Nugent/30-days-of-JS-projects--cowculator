@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -24,13 +24,32 @@
       </article>
       <div class="calculator__methods">
         <div class="calculator__functions">
-          <button data-type="sin" class="calculator__func primary-btn">
+          <div class="calculator__toggle">
+            <input 
+              type="radio" 
+              name="radordeg" 
+              id="radians" 
+              value="radians" 
+              class="calculator__func calculator__toggle-input" 
+              checked
+            >
+            <label for="radians" class="calculator__func calculator__toggle-label">Rad</label>
+            <input 
+              type="radio" 
+              name="radordeg" 
+              id="degrees" 
+              value="degrees" 
+              class="calculator__func calculator__toggle-input"
+            >
+            <label for="degrees" class="calculator__func calculator__toggle-label">Deg</label>
+          </div>
+          <button data-type="sin(" class="calculator__func primary-btn">
             sin
           </button>
-          <button data-type="cos" class="calculator__func primary-btn">
+          <button data-type="cos(" class="calculator__func primary-btn">
             cos
           </button>
-          <button data-type="tan" class="calculator__func primary-btn">
+          <button data-type="tan(" class="calculator__func primary-btn">
             tan
           </button>
           <button data-type="pi" class="calculator__func primary-btn">
