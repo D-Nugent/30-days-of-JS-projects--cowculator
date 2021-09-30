@@ -33,6 +33,7 @@ const calcMapping = {
   },
   '=':()=>{
     const isTrigonometry = currentCalc.some((calcEntry) => trigonometryOperators.indexOf(calcEntry) >= 0);
+    const isLogarithm = currentCalc.some((calcEntry) => calcEntry.includes('log'));
     if (currentCalc.includes('√')) {
       let indexOfSquareRoot = currentCalc.indexOf('√');
       let calcCopy = [...currentCalc]
@@ -50,6 +51,14 @@ const calcMapping = {
         let trigEndIndex = calcCopy.indexOf(')',trigIndex);
         calcCopy.splice(trigEndIndex,1,`* (Math.PI/180))`);
       }
+      solution = eval(calcCopy.join(''));
+      currentCalc.push(' = ');
+      return calcHistory.push(currentCalc);
+    } else if (isLogarithm) {
+      let calcCopy = [...currentCalc];
+      let logType = calcCopy.includes('log(') ? 'log(' : 'log10('
+      let logIndex = calcCopy.indexOf(logType);
+      calcCopy.splice(logIndex,1,`Math.${logType}`);
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
       return calcHistory.push(currentCalc);
