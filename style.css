@@ -40,6 +40,22 @@ main {
   justify-content: center;
 }
 
+/* Calc History Styling */
+
+.calc-history {
+  background-color: whitesmoke;
+  width: 70%;
+  min-width: 288px;
+  max-width: 512px;
+  margin: 5%;
+  border-radius: 8px;
+  padding: 1%;
+}
+
+.calc-history__placeholder {
+  margin: 0;
+  color: lightgray;
+}
 
 /* Calc Styling */
 

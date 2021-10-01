@@ -6,6 +6,7 @@ const calcScreen = {
   calc: document.querySelector('.calculator__calculation'),
   sol: document.querySelector('.calculator__solution'),
 }
+const calcHistoryWindow = document.querySelector('.calc-history');
 
 // Event Listeners
 allBtns.forEach(btn => btn.addEventListener('transitionend',function(){this.classList.remove('--active')}));
@@ -41,7 +42,7 @@ const calcMapping = {
       calcCopy.push(')');
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
-      return calcHistory.push(currentCalc);
+      return updateCalcHistory(currentCalc,solution)
     } else if (isTrigonometry) {
       let calcCopy = [...currentCalc];
       let trigType = calcCopy.includes('sin(') ? 'sin(' : calcCopy.includes('cos(') ? 'cos(' : 'tan(';
@@ -53,7 +54,7 @@ const calcMapping = {
       }
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
-      return calcHistory.push(currentCalc);
+      return updateCalcHistory(currentCalc,solution)
     } else if (isLogarithm) {
       let calcCopy = [...currentCalc];
       let logType = calcCopy.includes('log(') ? 'log(' : 'log10('
@@ -61,13 +62,13 @@ const calcMapping = {
       calcCopy.splice(logIndex,1,`Math.${logType}`);
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
-      return calcHistory.push(currentCalc);
+      return updateCalcHistory(currentCalc,solution)
     };
     let calc = eval(currentCalc.join(''));
     console.log(calc);
     solution = calc;
     currentCalc.push(' = ');
-    calcHistory.push(currentCalc)
+    return updateCalcHistory(currentCalc,solution)
   },
   pi:()=> {
     nonOperators.includes(parseFloat(currentCalc[currentCalc.length-1])) && currentCalc.push('*')
@@ -109,4 +110,17 @@ function addEntry(){
   calcScreen.sol.textContent = solution;
   console.log(`currentCalc`, currentCalc)
   console.log(`solution`, solution)
+}
+
+function updateCalcHistory(newCalc,newSolution) {
+  console.log('I ran');
+  calcHistory.push(newCalc);
+  calcHistoryWindow.classList.add('--active');
+  calcHistoryWindow.innerHTML = calcHistory.map((calc) => `<button class="calc-history__entry">${calc.join('')}</button`).join('');
+  const calcHistoryBtns = document.querySelectorAll('calc-history__entry');
+  calcHistoryBtns.forEach(btn => btn.addEventListener('click',loadCalculation));
+}
+
+function loadCalculation(){
+  console.dir(this);
 }
