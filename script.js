@@ -7,11 +7,21 @@ const calcScreen = {
   sol: document.querySelector('.calculator__solution'),
 }
 const calcHistoryWindow = document.querySelector('.calc-history');
+const calcHistoryList = document.querySelector('.calc-history__list');
+const showMeCowsBtn = document.querySelector('.btn-show-me-cows')
+const calcInCows = {
+  window: document.querySelector('.calc-in-cows'),
+  result: document.querySelector('.calc-in-cows__result'),
+  cows: document.querySelector('.calc-in-cows__cows'),
+  close: document.querySelector('.calc-in-cows__close'),
+}
 
 // Event Listeners
 allBtns.forEach(btn => btn.addEventListener('transitionend',function(){this.classList.remove('--active')}));
 allBtns.forEach(btn => btn.addEventListener('click',function(){this.classList.add('--active')}));
 allBtns.forEach(btn => btn.addEventListener('click',addEntry));
+showMeCowsBtn.addEventListener('click',showMeCows);
+calcInCows.close.addEventListener('click',function(){calcInCows.window.classList.remove('--active')});
 toggle.forEach(radio => radio.addEventListener('click', toggleRadians))
 
 // Control Variables
@@ -34,7 +44,7 @@ const calcMapping = {
   },
   '=':()=>{
     const isTrigonometry = currentCalc.some((calcEntry) => trigonometryOperators.indexOf(calcEntry) >= 0);
-    const isLogarithm = currentCalc.some((calcEntry) => calcEntry.includes('log'));
+    const isLogarithm = currentCalc.some((calcEntry) => (`${calcEntry}`).includes('log'));
     if (currentCalc.includes('√')) {
       let indexOfSquareRoot = currentCalc.indexOf('√');
       let calcCopy = [...currentCalc]
@@ -63,12 +73,15 @@ const calcMapping = {
       solution = eval(calcCopy.join(''));
       currentCalc.push(' = ');
       return updateCalcHistory(currentCalc,solution)
-    };
+    } else {
     let calc = eval(currentCalc.join(''));
-    console.log(calc);
     solution = calc;
+    if (!solution) {
+      return isError = true;
+    }
     currentCalc.push(' = ');
     return updateCalcHistory(currentCalc,solution)
+    }
   },
   pi:()=> {
     nonOperators.includes(parseFloat(currentCalc[currentCalc.length-1])) && currentCalc.push('*')
@@ -96,31 +109,84 @@ function toggleRadians(){
 
 function addEntry(){
   if (isError) calcMapping.ac();
-  let newEntry = this.dataset.type;
-  if (solution) {
-    currentCalc.splice(0,currentCalc.length,solution);
-    solution = null;
+
+  const newEntry = this.dataset.type;
+
+  if (!this.dataset.type) {
+    return
   }
+  // If there is currently a solution, use the value of the previous calculation as
+  // the starting value for the new calculation. i.e. ['3','+','1','='] -> ['4']
+  if (solution) {
+      currentCalc.splice(0,currentCalc.length,solution);
+      solution = null;
+  }
+
   if(calcMapping[newEntry] !== undefined) {
     calcMapping[newEntry]();
   } else {
     currentCalc.push(newEntry);
   }
-  calcScreen.calc.textContent = currentCalc.join('');
-  calcScreen.sol.textContent = solution;
-  console.log(`currentCalc`, currentCalc)
-  console.log(`solution`, solution)
-}
 
-function updateCalcHistory(newCalc,newSolution) {
-  console.log('I ran');
-  calcHistory.push(newCalc);
-  calcHistoryWindow.classList.add('--active');
-  calcHistoryWindow.innerHTML = calcHistory.map((calc) => `<button class="calc-history__entry">${calc.join('')}</button`).join('');
-  const calcHistoryBtns = document.querySelectorAll('calc-history__entry');
-  calcHistoryBtns.forEach(btn => btn.addEventListener('click',loadCalculation));
+  calcScreen.calc.textContent = [...currentCalc].join('');
+  calcScreen.sol.textContent = solution;
 }
 
 function loadCalculation(){
-  console.dir(this);
+  currentCalc = this.dataset.calc.split(',');
+  solution = this.dataset.solution;
+  calcScreen.calc.textContent = [...currentCalc].join('');
+  calcScreen.sol.textContent = solution;
+}
+
+function updateCalcHistory(newCalc,newSolution) {
+  calcHistory.push([...newCalc]);
+  calcHistoryWindow.classList.add('--active');
+    const newCalcElement = document.createElement('button');
+    newCalcElement.classList.add('calc-history__entry');
+    newCalcElement.textContent = `${newCalc.join('')} ${newSolution}`;
+    newCalcElement.dataset.calc = newCalc;
+    newCalcElement.dataset.solution = newSolution;
+    newCalcElement.addEventListener('click',loadCalculation);
+    calcHistoryList.appendChild(newCalcElement); 
+    if (!showMeCowsBtn.classList.contains('--visible')) {
+      showMeCowsBtn.classList.add('--visible');
+    }
+}
+
+function randomJumpTime(max,min){
+  const randomTime = Math.floor(Math.random() * (max - min + 1) - min) + 's';
+  return randomTime;
+}
+
+function pickJumpAnimation(){
+  const randomJump = Math.floor(Math.random() * (4 - 1 + 1) - 1) + 1;
+  return `cowjump${randomJump}`;
+}
+
+function showMeCows(){
+  calcInCows.cows.innerHTML = "";
+  calcInCows.result.innerHTML = `${solution} cows!`;
+  calcInCows.window.classList.add('--active');
+  const cowCount = Math.floor(solution);
+  const partialCow = solution % 1;
+  for (let i = 0; i < cowCount; i++) {
+    const lilCow = (document.createElement('p'));
+    lilCow.classList.add('calc-in-cows__lil-cow');
+    lilCow.textContent = '🐄';
+    if (cowCount < 600) {
+      lilCow.classList.add('--jumping');
+      lilCow.style.animationDelay = randomJumpTime(5,1);
+      lilCow.style.animationName = pickJumpAnimation();
+    }
+    calcInCows.cows.appendChild(lilCow);
+  }
+  if (partialCow) {
+    const partialCowElement = document.createElement('p');
+    partialCowElement.classList.add('calc-in-cows__partial-cow');
+    partialCowElement.textContent = `🐄`;
+    partialCowElement.style.width = `${partialCow+.2}em`;
+    console.log(partialCow)
+    calcInCows.cows.appendChild(partialCowElement);
+  }
 }
