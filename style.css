@@ -14,10 +14,6 @@ body {
   margin: 0;
 }
 
-:root{
-  --css-animation
-}
-
 *,*::before,*::after {
   box-sizing: inherit;
 }
@@ -159,7 +155,7 @@ main {
   55% {
     transform: translateY(0);
   }
-  70s% {
+  70% {
     transform: translateY(-10px);
   }
   90% {

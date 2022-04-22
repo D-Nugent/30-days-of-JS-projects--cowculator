@@ -38,6 +38,7 @@ const calcMapping = {
     solution = null;
     isError = false;
     calcScreen.calc.classList.remove();
+    showMeCowsBtn.classList.remove('--visible');
   },
   back:() => {
     currentCalc.pop();
