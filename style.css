@@ -169,6 +169,7 @@ main {
 .calc-in-cows__lil-cow {
   margin: .25%;
   height: fit-content;
+  font-size: 2.75rem;
 }
 
 .calc-in-cows__lil-cow.--jumping {
@@ -185,6 +186,7 @@ main {
   margin: .25%;
   height: fit-content;
   overflow: hidden;
+  font-size: 2.75rem;
 }
 
 .calc-in-cows__close {
